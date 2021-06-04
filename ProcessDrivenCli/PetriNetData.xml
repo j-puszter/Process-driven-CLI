@@ -1,0 +1,18 @@
+<document>
+    <place>
+        <id>1</id>
+        <label>p1</label>
+        <tokens>2</tokens>
+    </place>
+    <transition>
+        <id>2</id>
+        <label>t1</label>
+        <action>echo test</action>
+    </transition>
+    <arc>
+        <id>3</id>
+        <sourceId>1</sourceId>
+        <destinationId>2</destinationId>
+        <multiplicity>2</multiplicity>
+    </arc>
+</document>

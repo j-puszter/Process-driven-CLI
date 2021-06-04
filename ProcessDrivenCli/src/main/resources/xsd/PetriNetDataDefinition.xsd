@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="document">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="place" maxOccurs="unbounded" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="id" type="intType"/>
+							<xs:element name="label" type="labelType2"/>
+							<xs:element name="tokens" type="xs:nonNegativeInteger"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="transition" maxOccurs="unbounded" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="id" type="intType"/>
+							<xs:element name="label" type="labelType"/>
+							<xs:element name="action" type="actionType"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="arc" maxOccurs="unbounded" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="id" type="intType"/>
+							<xs:element name="sourceId" type="intType"/>
+							<xs:element name="destinationId" type="intType"/>
+							<xs:element name="multiplicity" type="xs:positiveInteger"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+		<!--zabezpecenie aby sourceId bola platna id referencia-->
+		<xs:key name="id_sourceId">
+			<xs:selector xpath="place|transition"/>
+			<xs:field xpath="id"/>
+		</xs:key>
+		<xs:keyref name="id_sourceId_ref" refer="id_sourceId">
+			<xs:selector xpath="arc"/>
+			<xs:field xpath="sourceId"/>
+		</xs:keyref>
+		<!--zabezpecenie aby destinationId bola platna id referencia-->
+		<xs:key name="id_destinationId">
+			<xs:selector xpath="place|transition"/>
+			<xs:field xpath="id"/>
+		</xs:key>
+		<xs:keyref name="id_destinationId_ref" refer="id_destinationId">
+			<xs:selector xpath="arc"/>
+			<xs:field xpath="destinationId"/>
+		</xs:keyref>
+		<!--zabezpecenie aby id boli unikatne-->
+		<xs:unique name="id_unique">
+			<xs:selector xpath="place|transition|arc"/>
+			<xs:field xpath="id"/>
+		</xs:unique>
+		<!--zabezpecenie aby label boli unikatne-->
+		<xs:unique name="label_unique">
+			<xs:selector xpath="transition"/>
+			<xs:field xpath="label"/>
+		</xs:unique>
+	</xs:element>
+	<!--definicia simpletype pre label-->
+	<xs:simpleType name="labelType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="50"/>
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--definicia simpletype pre label-->
+	<xs:simpleType name="labelType2">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="50"/>
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--definicia simpletype pre positiveInteger-->
+	<xs:simpleType name="intType">
+		<xs:restriction base="xs:positiveInteger">
+			<xs:totalDigits value="5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--definicia simpletype pre action-->
+	<xs:simpleType name="actionType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="0"/>
+			<xs:maxLength value="200"/>
+			<xs:whiteSpace value="collapse"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
